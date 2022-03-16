@@ -1,0 +1,81 @@
+version: '3.3'
+services:
+  redis:
+    image: redis
+    command: redis-server --requirepass SENHADOREDISAQUI --appendonly yes
+    ports:
+      - target: 6379
+        published: 6379
+        protocol: tcp
+        mode: host
+    networks:
+      - saml_net
+    volumes:
+      - 'redis_data_volume:/data'
+  mysql:
+    image: mysql
+    restart: always
+    command: '--default-authentication-plugin=mysql_native_password'
+    environment:
+      - MYSQL_DATABASE=meu_auth_db
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_TCP_PORT=3306
+    ports:
+      - target: 3306
+        published: 3307
+        protocol: tcp
+        mode: host
+    networks:
+      - saml_net
+    volumes:
+      - 'mysql_data_volume:/var/lib/mysql'
+      - './docker/mysql/startup.sql:/docker-entrypoint-initdb.d/startup.sql'
+  mysql-sp:
+    image: mysql
+    restart: always
+    command: '--default-authentication-plugin=mysql_native_password'
+    environment:
+      - MYSQL_DATABASE=meu_banco_local_sp
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_TCP_PORT=3308
+    ports:
+      - target: 3308
+        published: 3308
+        protocol: tcp
+        mode: host
+    networks:
+      - saml_net
+    volumes:
+      - 'mysql_sp_data_volume:/var/lib/mysql'
+      - './docker/mysql/startup-sp.sql:/docker-entrypoint-initdb.d/startup.sql'
+  identity-provider:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+    depends_on:
+      - mysql
+      - mysql-sp
+      - redis
+    links:
+      - mysql
+      - mysql-sp
+      - redis
+    networks:
+      - saml_net
+    extra_hosts:
+      - 'poc.saml.idp:127.0.0.1'
+      - 'poc.saml.sp-a:127.0.0.1'
+      - 'poc.saml.sp-b:127.0.0.1'
+    volumes:
+      - './:/var/www/html'
+networks:
+  saml_net: null
+volumes:
+  mysql_data_volume: null
+  mysql_sp_data_volume: null
+  redis_data_volume: null
