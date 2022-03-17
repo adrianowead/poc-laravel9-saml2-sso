@@ -21,7 +21,7 @@ Executar o docker build, bem como o docker-compose up. Lembre-se de ter as segui
 
 ### Etapa 3
 
-Ao inicializar, entre na máquina via ssh e instale as respectivas dependências:
+Ao inicializar, entre na máquina via ssh e instale as respectivas dependências, é importante que seja **sem as dependências de desenv**:
 
 _Para o Identity Provider_
 
