@@ -71,6 +71,7 @@ services:
       - 'poc.saml.idp:127.0.0.1'
       - 'poc.saml.sp-a:127.0.0.1'
       - 'poc.saml.sp-b:127.0.0.1'
+      - 'poc.saml.front-b:127.0.0.1'
     volumes:
       - './:/var/www/html'
 networks:
