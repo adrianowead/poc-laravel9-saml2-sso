@@ -20,12 +20,17 @@ class AccessTokenController extends Controller
             return response("não autenticado", 400);
         }
 
-        return response(AccessTokenModel::newToSession())
+        $token = AccessTokenModel::newToSession();
+
+        return response()
+            ->view('access_token', [
+                'access_token' => $token,
+            ])
             ->withCookie(
                 cookie(
                     name: 'access_token',
-                    value: AccessTokenModel::newToSession(),
-                    minutes: 29,
+                    value: $token,
+                    minutes: 1,
                     raw: true,
                     httpOnly: false
                 )
