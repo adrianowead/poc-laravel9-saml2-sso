@@ -128,19 +128,25 @@ class App
 
     async #gerarNovoAccessToken()
     {
+        this.#canLog = true;
+
         var frame = $("<iframe>");
         
         frame.attr('src', this.#links.access_token);
         frame.hide();
 
         frame.bind('load', (e) => {
-            const token = Cookies.get('access_token');
+            let token = Cookies.get('access_token');
 
             localStorage.setItem('access_token', token);
 
             Cookies.remove('access_token');
 
             this.#mostrarAccessToken();
+
+            token = JSON.parse(token);
+
+            this.registrarLog(`Gerado access token: ${token.token}, expira em: ${token.expire_at}`);
         });
 
         frame.appendTo('body');
