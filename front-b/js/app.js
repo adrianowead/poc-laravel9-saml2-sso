@@ -127,6 +127,17 @@ class App
     {
         $("#editarPerfil").bind('click', () => this.#editarPerfil());
         $("#novoAccessToken").bind('click', () => this.#gerarNovoAccessToken());
+        $("#resetCompleto").bind('click', () => this.#resetCompleto());
+    }
+
+    async #resetCompleto()
+    {
+        if(window.confirm("Deseja realmente apagar todas as informações locais neste front?")) {
+            localStorage.clear();
+            sessionStorage.clear();
+
+            window.top.location.href="/";
+        }
     }
 
     async #gerarNovoAccessToken()
