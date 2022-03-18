@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS `meu_banco_local_sp`.`tb_users` (
   `id` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `last_login` DATETIME NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (`uid`),
-  UNIQUE INDEX `uid_UNIQUE` (`uid` ASC) VISIBLE);
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
 
 CREATE TABLE IF NOT EXISTS `meu_banco_local_sp`.`sessions_spa` (
   `id` VARCHAR(255) NOT NULL,
