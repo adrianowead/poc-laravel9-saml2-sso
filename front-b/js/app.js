@@ -123,7 +123,6 @@ class App
 
     async #bindEvents()
     {
-        $("#edicaoDePerfil").bind('click', () => this.#simularEdicaoPerfil());
         $("#novoAccessToken").bind('click', () => this.#gerarNovoAccessToken());
     }
 
