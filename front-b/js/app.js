@@ -9,11 +9,13 @@ class App
 
     #links = {
         'access_token': 'http://poc.saml.sp-b/access_token/',
+        'editar_perfil': 'http://poc.saml.sp-b/api/editar-perfil',
     };
 
     constructor() {
         this.#carregarLog();
         this.#mostrarUsuario();
+        this.#mostrarAccessToken();
         this.#processarAcoesRecebidas();
         this.#bindEvents();
     }
@@ -123,6 +125,7 @@ class App
 
     async #bindEvents()
     {
+        $("#editarPerfil").bind('click', () => this.#editarPerfil());
         $("#novoAccessToken").bind('click', () => this.#gerarNovoAccessToken());
     }
 
@@ -150,5 +153,51 @@ class App
         });
 
         frame.appendTo('body');
+    }
+
+    async #editarPerfil()
+    {
+        this.#canLog = true;
+
+        let token = localStorage.getItem('access_token');
+
+        let dataForm = new FormData;
+
+        if(token) {
+            token = JSON.parse(token);
+
+            dataForm.append('access_token', token.token);
+        }
+
+        $.ajax({
+            url: this.#links.editar_perfil,
+            dataType: 'json',
+            data: dataForm,
+            processData: false,
+            contentType: false,
+            type: 'post',
+            success: (e) => {
+                this.registrarLog(
+                    e.message
+                );
+            },
+            error: (e) => {
+                this.registrarLog(
+                    `Oops! Falha ao tentar editar perfil, verifique o erro:`
+                );
+
+                this.registrarLog(e.responseJSON.message);
+
+                $(e.responseJSON.errors).each((_, erro) => {
+                    let out = 'Erro:';
+
+                    $(Object.keys(erro)).each((_, key) => {
+                        out += ` [${key}] ${erro[key]}`;
+                    });
+
+                    this.registrarLog(out);
+                });
+            }
+        });
     }
 }
