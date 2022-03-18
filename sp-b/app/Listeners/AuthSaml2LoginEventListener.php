@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use Aacotroneo\Saml2\Events\Saml2LoginEvent;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Aacotroneo\Saml2\Events\Saml2LoginEvent;
 
 class AuthSaml2LoginEventListener
 {

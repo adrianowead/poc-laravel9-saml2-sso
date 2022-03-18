@@ -20,6 +20,7 @@ RUN a2dissite default-ssl.conf
 RUN a2ensite vhost-idp.conf
 RUN a2ensite vhost-sp-a.conf
 RUN a2ensite vhost-sp-b.conf
+RUN a2ensite vhost-front-b.conf
 
 # abrindo porta 80
 EXPOSE 80

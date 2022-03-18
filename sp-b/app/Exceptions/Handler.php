@@ -44,12 +44,6 @@ class Handler extends ExceptionHandler
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson())
-        {
-            return response()->json(['error' => 'Unauthenticated.'], 401); // Or, return a response that causes client side js to redirect to '/routesPrefix/myIdp1/login'
-        }
-
-        $saml2Auth = new Saml2Auth(Saml2Auth::loadOneLoginAuthFromIpdConfig('meuServicoMuitoLegal2'));
-        return $saml2Auth->login(route('logado'));
+        return redirect(route('login'));
     }
 }
