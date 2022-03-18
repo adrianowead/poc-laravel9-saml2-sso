@@ -4,15 +4,17 @@ class App
 
     #acoes = {
         'login': async (data) => this.#acao_logar(data),
-        'logout': async () => this.#acao_deslogar(),
+        'logout': async _ => this.#acao_deslogar(),
     };
 
     #links = {
-        'access_token': 'http://poc.saml.sp-b/access_token/',
+        'access_token': 'http://poc.saml.sp-b/access_token',
         'editar_perfil': 'http://poc.saml.sp-b/api/editar-perfil',
     };
 
     constructor() {
+        document.domain="saml.sp-b"
+
         this.#carregarLog();
         this.#mostrarUsuario();
         this.#mostrarAccessToken();
@@ -125,9 +127,9 @@ class App
 
     async #bindEvents()
     {
-        $("#editarPerfil").bind('click', () => this.#editarPerfil());
-        $("#novoAccessToken").bind('click', () => this.#gerarNovoAccessToken());
-        $("#resetCompleto").bind('click', () => this.#resetCompleto());
+        $("#editarPerfil").bind('click', _ => this.#editarPerfil());
+        $("#novoAccessToken").bind('click', _ => this.#gerarNovoAccessToken());
+        $("#resetCompleto").bind('click', _ => this.#resetCompleto());
     }
 
     async #resetCompleto()
@@ -150,20 +152,53 @@ class App
         frame.hide();
 
         frame.bind('load', (e) => {
-            let token = Cookies.get('access_token');
 
-            localStorage.setItem('access_token', token);
+            // tentativa por cookie
+            try{
+                let token = Cookies.get('access_token');
 
-            Cookies.remove('access_token');
+                if(token) {
+                    localStorage.setItem('access_token', token);
+                    Cookies.remove('access_token');
+
+                    token = JSON.parse(token);
+                    this.registrarLog(`Recebido access token via Cookie 🍪: ${token.token}, expira em: ${token.expire_at}`);
+                }
+            } catch(e){
+                this.registrarLog(`⚠️ Oops! ${e.message}`)
+            }
+
+            // tentativa por conteúdo do frame
+            try{
+                let token = frame.contents().find("#access_token").html();
+
+                if(token) {
+                    localStorage.setItem('access_token', token);
+
+                    token = JSON.parse(token);
+                    this.registrarLog(`Recebido access token via frame content 🪟: ${token.token}, expira em: ${token.expire_at}`);
+                }
+            } catch(e){
+                this.registrarLog(`⚠️ Oops! ${e.message}`)
+            }
+
+            frame.remove();
 
             this.#mostrarAccessToken();
-
-            token = JSON.parse(token);
-
-            this.registrarLog(`Gerado access token: ${token.token}, expira em: ${token.expire_at}`);
         });
 
         frame.appendTo('body');
+    }
+
+    /**
+     * Receber token ativamente
+     * O backend solicitado, envia para esta função o token
+     */
+    async remoteAccessToken(token)
+    {
+        localStorage.setItem('access_token', btoa(token));
+
+        this.registrarLog(`Recebido access token remoto 😱: ${token.token}, expira em: ${token.expire_at}`);
     }
 
     async #editarPerfil()
