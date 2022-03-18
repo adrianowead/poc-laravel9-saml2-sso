@@ -24,3 +24,11 @@ CREATE TABLE IF NOT EXISTS `meu_banco_local_sp`.`sessions_spb` (
   `last_activity` INTEGER NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
+
+CREATE TABLE IF NOT EXISTS `meu_banco_local_sp`.`access_token_spb` (
+  `token` VARCHAR(255) NOT NULL,
+  `user_id` VARCHAR(255) NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT NOW(),
+  `expire_at` DATETIME NOT NULL,
+  PRIMARY KEY (`token`),
+  UNIQUE INDEX `token_UNIQUE` (`token` ASC) VISIBLE);

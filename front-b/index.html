@@ -11,6 +11,13 @@
             background-color: rgb(56, 56, 56);
             color: #fff;
             padding: 10px;
+
+            max-height: 300px;
+            overflow-y: scroll;
+        }
+
+        #log{
+            min-height: 200px;
         }
     </style>
 </head>
@@ -21,18 +28,37 @@
     <pre><code id="usuario">carregando...</code></pre>
 
     <strong>Access Token:</strong>
-    <pre><code id="access_token">carregando...</code></pre>
+    <pre><code id="access_token">não gerado</code></pre>
 
     <ul>
-        <li id="login">
+        <li>
             <a href="http://poc.saml.sp-b/login/1">Login (Via Backend)</a>
         </li>
-        <li id="logout">
+        <li>
             <a href="http://poc.saml.sp-b/logout/1">Logout</a>
         </li>
     </ul>
 
+    <br>
+    <br>
+
+    <h3>Simulando ações que precisem de access token</h3>
+    <p>deve ser gerado para o usuário logado</p>
+
+    <div>
+        <button id="novoAccessToken">Novo access token avulso</button>
+    </div>
+    <br>
+    <div>
+        <button id="edicaoDePerfil">Request de edição de perfil</button>
+    </div>
+    <br>
+
+    <strong>Log:</strong>
+    <pre><code id="log"></code></pre>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="js/app.js"></script>
     <script>
         $(document).ready(() => new App);

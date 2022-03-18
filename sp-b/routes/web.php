@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AccessTokenController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthSaml2Controller;
+use App\Models\AccessTokenModel;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,3 +42,8 @@ Route::prefix('admin')->middleware(["auth"])->group(function() {
         return view('dash');
     })->name('dash');
 });
+
+/**
+ * Rota externa ao middleware auth, para tratamento personalizado de erro
+ */
+Route::get('access_token', [AccessTokenController::class, 'generate']);
