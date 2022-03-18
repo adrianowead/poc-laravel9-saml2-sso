@@ -58,6 +58,7 @@ Para isso altere seu arquivo **hosts** (verifice o seu sistema operacional), _e.
 127.0.0.1	poc.saml.idp
 127.0.0.1	poc.saml.sp-a
 127.0.0.1	poc.saml.sp-b
+127.0.0.1	poc-front.saml.sp-b
 ...
 ```
 
@@ -71,7 +72,15 @@ Ao navegar será solicitada autenticação, entre com o usuário padrão:
 
 **pass:** 123enter
 
-Observe que ao se logar em qualquer serviço sua sessão é criada, e quando o segundo serviço precisar de autenticação, será aproveitado o login já feito no outro.
+Observe que ao se logar em qualquer serviço sua sessão é criada, e quando o segundo serviço precisar de autenticação, será aproveitado o login já feito.
+
+### Etapa 6
+
+Para testar a integração de um front externo, como uma PWA, você pode acessar o poc-front.saml.sp-b, e avaliar o funcionamento das sessões, mantendo ainda o uso global com IdP.
+
+A limitação técnica que temos por agora, é relacionado à segurança. Pois no HTML r Javascript não podemos ter nenhuma informação sensível, como chaves privadas ou senhas. Desse modo, a geração segura de um access token para operações via API, depende do compartilhamento de sessão entre domínio e subdomínio.
+
+Neste exemplo front é relacionado ao sp-b.
 
 ## Material de apoio
 
